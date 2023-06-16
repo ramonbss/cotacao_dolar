@@ -1,0 +1,15 @@
+ # Python
+*.pyc
+*.pyo
+__pycache__/
+venv/
+*.env
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Dependencies
+**/.venv/
+**/.env
