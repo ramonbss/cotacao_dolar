@@ -14,6 +14,27 @@
   </head>
   <body>
     <h1>Cotações do Dólar</h1>
-    <div id="graficos-container"></div>
+    <div class="container">
+      <div class="container-botoes">
+        <form method="'post" id="cotacaoReal" action="/obterCotacaoReal">
+          <button class="botao-cotacao" type="button" id="botaoReal">
+            Dólar x Real
+          </button>
+        </form>
+
+        <form method="'post" id="cotacaoEuro" action="/obterCotacaoEuro">
+          <button class="botao-cotacao" type="button" id="botaoEuro">
+            Dólar x Euro
+          </button>
+        </form>
+
+        <form method="'post" id="cotacaoIene" action="/obterCotacaoIene">
+          <button class="botao-cotacao" type="button" id="botaoIene">
+            Dólar x Iene
+          </button>
+        </form>
+      </div>
+      <div id="graficos-container"></div>
+    </div>
   </body>
 </html>
