@@ -1,0 +1,8 @@
+body {
+  background-color: #dddddd;
+}
+
+#graficos-container {
+  width: 100%;
+  height: 400px;
+}

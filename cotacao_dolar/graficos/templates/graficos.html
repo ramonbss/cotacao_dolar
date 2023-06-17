@@ -1,9 +1,19 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="{% static 'js/graficos.js'%}"></script>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/styles.css' %}"
+    />
     <title>Cotações - Dólar</title>
   </head>
   <body>
     <h1>Cotações do Dólar</h1>
+    <div id="graficos-container"></div>
   </body>
 </html>
