@@ -14,11 +14,31 @@ h1 {
 .botao-cotacao {
   height: 4vh;
   width: 10vw;
-  margin-left: 1vw;
 }
 
 .container-botoes {
   display: flex;
   flex-direction: row;
   margin: 1vh 0px;
+}
+
+.datepicker-container {
+  position: relative;
+  margin-right: 1vw;
+}
+
+.datepicker-dropbox {
+  position: absolute;
+  background-color: white;
+  z-index: 9999;
+}
+
+.container-datas {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#saida-erros {
+  color: red;
 }
