@@ -33,7 +33,7 @@ export function setBotoesDesabilitado(novoEstado) {
 }
 
 async function obterCotacoes(moedaAlvo) {
-  if (validarCamposDeData() == false) {
+  if ((await validarCamposDeData()) == false) {
     console.log("Campos de data incosistentes");
     return;
   }

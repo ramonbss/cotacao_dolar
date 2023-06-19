@@ -1,3 +1,5 @@
+import { enviarPostRequest } from "./http_requests.js";
+
 export function inicializar_data_pickers() {
   let inputDataInicio = document.getElementById("data-inicio");
   let inputDataFim = document.getElementById("data-fim");
@@ -16,12 +18,12 @@ export function inicializar_data_pickers() {
     autoclose: true,
   });
 
-  $(inputDataInicio).on("changeDate", function () {
-    validarCamposDeData();
+  $(inputDataInicio).on("changeDate", async function () {
+    await validarCamposDeData();
   });
 
-  $(inputDataFim).on("changeDate", function () {
-    validarCamposDeData();
+  $(inputDataFim).on("changeDate", async function () {
+    await validarCamposDeData();
   });
 
   inicializarDataPickersComDataAtual(inputDataInicio, inputDataFim);
@@ -37,18 +39,20 @@ export function criarDataObjAPartirFormatoBrasil(strDataFormatoBrasil) {
   );
 }
 
-export function validarCamposDeData() {
+export async function validarCamposDeData() {
   let inputDataInicio = document.getElementById("data-inicio");
   let inputDataFim = document.getElementById("data-fim");
   let dataInicio = inputDataInicio.value;
   let dataFim = inputDataFim.value;
-  // Validate the inputs as dates in dd/mm/YYYY format
+  // Valida se formato das datas dd/mm/YYYY
   let dataInicioValida = validarData(dataInicio);
   let dataFimValida = validarData(dataFim);
 
   if (dataInicioValida && dataFimValida) {
-    // Compare the dates
-    if (checarIntervaloEntreDatas(dataInicio, dataFim)) {
+    // Compara datas
+    const isDataValida = await checarIntervaloEntreDatas(dataInicio, dataFim);
+    console.log("Data e valida: ", isDataValida);
+    if (isDataValida) {
       console.log("Data valida");
       return true;
     } else {
@@ -96,12 +100,31 @@ function validarData(strData) {
   );
 }
 
-function checarIntervaloEntreDatas(dataInicio, dataFim) {
+async function checarIntervaloEntreDatas(dataInicio, dataFim) {
   let dateObj1 = criarDataObjAPartirFormatoBrasil(dataInicio);
   let dateObj2 = criarDataObjAPartirFormatoBrasil(dataFim);
 
   let diferencaEntreDatas = dateObj2.getTime() - dateObj1.getTime();
   let diferencaEmDias = Math.ceil(diferencaEntreDatas / (1000 * 3600 * 24));
 
-  return diferencaEmDias >= 0 && diferencaEmDias <= 5;
+  const numero_dias_uteis = await contar_dias_uteis_entre_datas(
+    dataInicio,
+    dataFim
+  );
+  console.log("Numero de dias uteis entre as datas: ", numero_dias_uteis);
+
+  return diferencaEmDias >= 0 && numero_dias_uteis <= 5;
+}
+
+async function contar_dias_uteis_entre_datas(strDataInicio, strDataFim) {
+  let request_data = {
+    data_inicio: strDataInicio,
+    data_fim: strDataFim,
+  };
+
+  const respostaServidor = await enviarPostRequest(
+    "/graficos/contar_dias_uteis/",
+    request_data
+  );
+  return respostaServidor["data"];
 }
