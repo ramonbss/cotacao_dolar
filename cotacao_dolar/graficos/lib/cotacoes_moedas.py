@@ -1,6 +1,7 @@
 import requests
-from .models import CotacaoDolar
+from ..models import CotacaoDolar
 from datetime import datetime
+from .funcoes_data import converter_data
 
 
 class Cotacoes:
@@ -43,27 +44,13 @@ class Cotacoes:
 class CotacaoBancoDeDados:
 
     @classmethod
-    def _converter_data(cls, data: str) -> datetime:
-        """
-            Converte uma data string no formato do VatComply
-             em um objeto datetime
-
-        Args:
-            data (str): data no formato YYYY-mm-dd
-
-        Returns:
-            datetime: Objeto datetime pronto para ser salvo no banco de dados
-        """
-        return datetime.strptime(data, "%Y-%m-%d")
-
-    @classmethod
     def obter_cotacao(cls, moeda, data):
-        data_convertida = cls._converter_data(data)
+        data_convertida = converter_data(data)
         return CotacaoDolar.objects.filter(moeda=moeda, data=data_convertida).first()
 
     @classmethod
     def salvar_cotacao(cls, moeda: str, cotacao: float, data: str):
-        data_convertida = cls._converter_data(data)
+        data_convertida = converter_data(data)
         cotacao = round(cotacao, 2)
         nova_cotacao = CotacaoDolar(
             moeda=moeda, cotacao=cotacao, data=data_convertida)

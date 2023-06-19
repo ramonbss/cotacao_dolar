@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .cotacoes_moedas import Cotacoes
+from .lib.cotacoes_moedas import Cotacoes
 from json import loads
 # Create your views here.
 
