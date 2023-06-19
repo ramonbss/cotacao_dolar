@@ -2,6 +2,7 @@ import {
   criarDataObjAPartirFormatoBrasil,
   validarCamposDeData,
 } from "./funcoes_data.js";
+import { enviarPostRequest } from "./http_requests.js";
 import { plotar_valores } from "./graficos.js";
 
 export function inicializarBotoesCotacao() {
@@ -77,33 +78,7 @@ async function lerCotacaoNoServidor(moedaAlvo, data) {
     data: data,
   };
 
-  return await sendPostRequest("/graficos/cotacoes/", request_data);
-}
-
-async function sendPostRequest(url, request_data) {
-  try {
-    console.log("Url: ", url);
-    console.log("Request data: ", request_data);
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request_data),
-    });
-    console.log("Server response:", response);
-    if (!response.ok) {
-      throw new Error("Error in AJAX POST request");
-    }
-
-    const responseData = await response.json();
-
-    // Process the response data or return it
-    return responseData;
-  } catch (error) {
-    console.error(error);
-    // Handle the error condition
-  }
+  return await enviarPostRequest("/graficos/cotacoes/", request_data);
 }
 
 function obterCookie(name) {
