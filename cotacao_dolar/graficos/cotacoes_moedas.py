@@ -7,7 +7,8 @@ class Cotacoes:
         cotacoes = _Cotacao_VatComply.obter_cotacao(
             data
         )
-        return cotacoes['rates'][par_alvo]
+        print(f'Resposta VarComply: {cotacoes}')
+        return round(cotacoes['rates'][par_alvo], 2)
 
 
 class _Cotacao_VatComply:

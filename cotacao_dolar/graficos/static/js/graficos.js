@@ -1,12 +1,19 @@
 import { inicializar_data_pickers } from "./funcoes_data.js";
+import { inicializarBotoesCotacao } from "./funcoes_cotacoes.js";
 
-function plotar_valores(moeda_alvo, valores, datas) {
+const parNomes = {
+  BRL: "Real",
+  EUR: "Euro",
+  JPY: "Iene",
+};
+
+export function plotar_valores(moedaAlvo, valores, datas) {
   const chart = Highcharts.chart("graficos-container", {
     chart: {
       type: "line",
     },
     title: {
-      text: "Cotacao Dólar x" + moeda_alvo,
+      text: "Cotacao Dólar x " + parNomes[moedaAlvo],
     },
     xAxis: {
       title: {
@@ -16,7 +23,7 @@ function plotar_valores(moeda_alvo, valores, datas) {
     },
     yAxis: {
       title: {
-        text: "Valor em Dólar",
+        text: "Valor em Dólares",
       },
     },
     series: [
@@ -30,5 +37,6 @@ function plotar_valores(moeda_alvo, valores, datas) {
 
 document.addEventListener("DOMContentLoaded", function () {
   inicializar_data_pickers();
-  plotar_valores("Real", [1, 2, 3], ["01/01", "02/01", "03/01"]);
+  inicializarBotoesCotacao();
+  plotar_valores("BRL", [1, 2, 3], ["01/01", "02/01", "03/01"]);
 });
