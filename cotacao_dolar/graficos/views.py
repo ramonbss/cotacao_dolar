@@ -14,10 +14,10 @@ def graficos(request):
 @csrf_exempt
 def cotacoes(request):
     if request.method == 'POST':
-        data = loads(request.body)
-        print(f'Request: {data}')
-        moedaAlvo = data['moeda']
-        data = data['data']
+        request_body = loads(request.body)
+        print(f'Request: {request_body}')
+        moedaAlvo = request_body['moeda']
+        data = request_body['data']
         resposta_servidor = Cotacoes.obter_cotacao(
             moedaAlvo, data
         )
