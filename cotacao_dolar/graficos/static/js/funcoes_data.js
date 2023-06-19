@@ -83,7 +83,12 @@ function validarData(strData) {
 
   // Cria um objeto Date para validar as entradas
   // Um dia 35 seria validado pelo o regex, mas daria erro aqui
-  let data = criarDataObjAPartirFormatoBrasil(strData);
+  let camposDaData = strData.split("/");
+  let dia = parseInt(camposDaData[0], 10);
+  let mes = parseInt(camposDaData[1], 10) - 1;
+  let ano = parseInt(camposDaData[2], 10);
+
+  let data = new Date(ano, mes, dia);
   return (
     data.getDate() === dia &&
     data.getMonth() === mes &&
