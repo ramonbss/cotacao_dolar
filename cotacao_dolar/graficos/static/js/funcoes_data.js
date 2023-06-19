@@ -37,7 +37,7 @@ export function criarDataObjAPartirFormatoBrasil(strDataFormatoBrasil) {
   );
 }
 
-function validarCamposDeData() {
+export function validarCamposDeData() {
   let inputDataInicio = document.getElementById("data-inicio");
   let inputDataFim = document.getElementById("data-fim");
   let dataInicio = inputDataInicio.value;

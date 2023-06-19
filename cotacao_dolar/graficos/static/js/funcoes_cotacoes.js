@@ -1,4 +1,7 @@
-import { criarDataObjAPartirFormatoBrasil } from "./funcoes_data.js";
+import {
+  criarDataObjAPartirFormatoBrasil,
+  validarCamposDeData,
+} from "./funcoes_data.js";
 import { plotar_valores } from "./graficos.js";
 
 export function inicializarBotoesCotacao() {
@@ -20,7 +23,19 @@ export function inicializarBotoesCotacao() {
   });
 }
 
+export function setBotoesDesabilitado(novoEstado) {
+  const buttons = document.getElementsByClassName("botao-cotacao");
+
+  for (const element of buttons) {
+    element.disabled = novoEstado;
+  }
+}
+
 async function obterCotacoes(moedaAlvo) {
+  if (validarCamposDeData() == false) {
+    console.log("Campos de data incosistentes");
+    return;
+  }
   let inputDataInicio = document.getElementById("data-inicio");
   let inputDataFim = document.getElementById("data-fim");
 
@@ -69,7 +84,6 @@ async function sendPostRequest(url, request_data) {
   try {
     console.log("Url: ", url);
     console.log("Request data: ", request_data);
-    console.log("Json request data: ", JSON.stringify(request_data));
     const response = await fetch(url, {
       method: "POST",
       headers: {
