@@ -3,7 +3,7 @@ import {
   validarCamposDeData,
 } from "./funcoes_data.js";
 import { enviarPostRequest } from "./http_requests.js";
-import { plotar_valores } from "./graficos.js";
+import { plotar_valores, mostrarMensagemDeErro } from "./graficos.js";
 
 export function inicializarBotoesCotacao() {
   console.log("Inicializando eventos dos botoes");
@@ -34,7 +34,10 @@ export function setBotoesDesabilitado(novoEstado) {
 
 async function obterCotacoes(moedaAlvo) {
   if ((await validarCamposDeData()) == false) {
-    console.log("Campos de data incosistentes");
+    console.log("Campos de data inconsistentes");
+    mostrarMensagemDeErro(
+      "Verifique se o intervalo entre as datas é de 5 dias úteis, no máximo\nou se a Data Inicio escolhida está antes da Data Final"
+    );
     return;
   }
   let inputDataInicio = document.getElementById("data-inicio");
@@ -66,10 +69,14 @@ async function obterCotacoes(moedaAlvo) {
       cotacoes.push(cotacao);
       datas.push(dia + "-" + mes + "-" + ano);
     } else {
+      mostrarMensagemDeErro(
+        "Erro ao obter cotação do servidor, tente novamente"
+      );
     }
     dataAtual.setDate(dataAtual.getDate() + 1); // Move to the next day
   }
   plotar_valores(moedaAlvo, cotacoes, datas);
+  mostrarMensagemDeErro("");
 }
 
 async function lerCotacaoNoServidor(moedaAlvo, data) {

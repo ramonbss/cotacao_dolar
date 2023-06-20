@@ -35,6 +35,11 @@ export function plotar_valores(moedaAlvo, valores, datas) {
   });
 }
 
+export function mostrarMensagemDeErro(mensagem) {
+  let inputErro = document.getElementById("saida-erros");
+  inputErro.textContent = mensagem;
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   inicializar_data_pickers();
   inicializarBotoesCotacao();
