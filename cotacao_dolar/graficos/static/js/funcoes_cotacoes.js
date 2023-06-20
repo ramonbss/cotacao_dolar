@@ -33,11 +33,13 @@ export function setBotoesDesabilitado(novoEstado) {
 }
 
 async function obterCotacoes(moedaAlvo) {
+  setBotoesDesabilitado(true);
   if ((await validarCamposDeData()) == false) {
     console.log("Campos de data inconsistentes");
     mostrarMensagemDeErro(
       "Verifique se o intervalo entre as datas é de 5 dias úteis, no máximo\nou se a Data Inicio escolhida está antes da Data Final"
     );
+    setBotoesDesabilitado(false);
     return;
   }
   let inputDataInicio = document.getElementById("data-inicio");
@@ -77,6 +79,7 @@ async function obterCotacoes(moedaAlvo) {
   }
   plotar_valores(moedaAlvo, cotacoes, datas);
   mostrarMensagemDeErro("");
+  setBotoesDesabilitado(false);
 }
 
 async function lerCotacaoNoServidor(moedaAlvo, data) {
