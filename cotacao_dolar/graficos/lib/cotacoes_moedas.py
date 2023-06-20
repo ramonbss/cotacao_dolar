@@ -11,21 +11,19 @@ class Cotacoes:
 
     @classmethod
     def obter_cotacao(cls, par_alvo: str, data=''):
-        if not data == '':
+        if data == '':
             data = datetime.now().strftime("%Y-%m-%d")
         cotacao_database = CotacaoBancoDeDados.obter_cotacao(par_alvo, data)
         if cotacao_database:
-            print(f'Dados lido do DB Moeda: {cotacao_database.moeda}\n'
-                  f'Cotacao: {cotacao_database.cotacao}')
             return cotacao_database.cotacao
 
         cotacoes = _Cotacao_VatComply.obter_cotacao(
             data
         )
-        print(f'Resposta VatComply: {cotacoes}')
+
         rates = cotacoes['rates']
         cls._salvar_cotacoes_no_banco_de_dados(
-            rates, cotacoes['date']
+            rates, data
         )
 
         return round(rates[par_alvo], 2)
@@ -55,6 +53,8 @@ class CotacaoBancoDeDados:
         nova_cotacao = CotacaoDolar(
             moeda=moeda, cotacao=cotacao, data=data_convertida)
         nova_cotacao.save()
+        print('-'*20)
+        print(f'\n\nSalvo no db:\n{nova_cotacao}\n\n')
 
     @classmethod
     def salvar_cotacoes(cls, moedas, cotacoes, datas):
