@@ -20,6 +20,8 @@ h1 {
   display: flex;
   flex-direction: row;
   margin: 1vh 0px;
+  column-gap: 3%;
+  justify-content: center;
 }
 
 .datepicker-container {
