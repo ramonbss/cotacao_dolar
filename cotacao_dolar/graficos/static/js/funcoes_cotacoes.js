@@ -37,7 +37,7 @@ async function obterCotacoes(moedaAlvo) {
   if ((await validarCamposDeData()) == false) {
     console.log("Campos de data inconsistentes");
     mostrarMensagemDeErro(
-      "Verifique se o intervalo entre as datas é de 5 dias úteis, no máximo\nou se a Data Inicio escolhida está antes da Data Final"
+      "Verifique se o intervalo entre as datas é de até 5 dias úteis ou se a Data Inicio escolhida está antes da Data Final"
     );
     setBotoesDesabilitado(false);
     return;
