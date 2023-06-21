@@ -43,5 +43,4 @@ export function mostrarMensagemDeErro(mensagem) {
 document.addEventListener("DOMContentLoaded", function () {
   inicializar_data_pickers();
   inicializarBotoesCotacao();
-  plotar_valores("BRL", [1, 2, 3], ["01/01", "02/01", "03/01"]);
 });
