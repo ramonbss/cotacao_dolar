@@ -123,7 +123,7 @@ async function contar_dias_uteis_entre_datas(strDataInicio, strDataFim) {
   };
 
   const respostaServidor = await enviarPostRequest(
-    "/graficos/contar_dias_uteis/",
+    "/api/dias_uteis/obter",
     request_data
   );
   return respostaServidor["data"];
