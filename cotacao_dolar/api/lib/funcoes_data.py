@@ -5,20 +5,6 @@ import holidays
 feriados = holidays.Brazil()
 
 
-def converter_data(data: str) -> datetime:
-    """
-        Converte uma data string no formato do VatComply
-            em um objeto datetime
-
-    Args:
-        data (str): data no formato YYYY-mm-dd
-
-    Returns:
-        datetime: Objeto datetime pronto para ser salvo no banco de dados
-    """
-    return datetime.strptime(data, "%Y-%m-%d")
-
-
 def checar_se_dia_util(data):
     # Checa se dia da semana (0- Segunda .. 5- Sabado, 6- Domingo)
     if data.weekday() < 5:
