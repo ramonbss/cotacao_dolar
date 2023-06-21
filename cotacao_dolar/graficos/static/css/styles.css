@@ -38,7 +38,7 @@ h1 {
 .container-datas {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  justify-content: center;
 }
 
 #saida-erros {
