@@ -47,10 +47,12 @@ def ler_cotacao_banco_de_dados(request):
                 print(e)
                 return retornar_erro('A data precisa está no formato dd-mm-YYYY')
 
+        host = request.get_host()
+
         parametros_post = {'moeda': moeda,
                            'data': data}
         resposta = requests.post(
-            'http://127.0.0.1:8000/graficos/cotacoes/database', json=parametros_post).json()
+            f'http://{host}/graficos/cotacoes/database', json=parametros_post).json()
         print(f'dir resposta: {dir(resposta)}')
         print(f'Resposta do servidor:  {resposta}')
         if resposta['status']:
