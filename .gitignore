@@ -13,3 +13,6 @@ venv/
 # Dependencies
 **/.venv/
 **/.env
+
+# Django dependencies
+cotacao_dolar/static/*
