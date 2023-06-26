@@ -1,22 +1,23 @@
 import { enviarPostRequest } from "./http_requests.js";
 
+function configurarDatePicker(datePicker, strDatePickerContainer) {
+  $(datePicker).datepicker({
+    format: "dd/mm/yyyy",
+    language: "pt-BR",
+    container: strDatePickerContainer,
+    autoclose: true,
+    startDate: new Date(1999, 0, 4),
+    endDate: new Date(),
+  });
+}
+
 export function inicializar_data_pickers() {
   let inputDataInicio = document.getElementById("data-inicio");
   let inputDataFim = document.getElementById("data-fim");
 
-  $(inputDataInicio).datepicker({
-    format: "dd/mm/yyyy",
-    language: "pt-BR",
-    container: "#datepicker-dropbox-inicio",
-    autoclose: true,
-  });
+  configurarDatePicker(inputDataInicio, "#datepicker-dropbox-inicio");
 
-  $(inputDataFim).datepicker({
-    format: "dd/mm/yyyy",
-    language: "pt-BR",
-    container: "#datepicker-dropbox-fim",
-    autoclose: true,
-  });
+  configurarDatePicker(inputDataFim, "#datepicker-dropbox-fim");
 
   $(inputDataInicio).on("changeDate", async function () {
     await validarCamposDeData();
@@ -66,17 +67,16 @@ export async function validarCamposDeData() {
 }
 
 function inicializarDataPickersComDataAtual(inputDataInicio, inputDataFim) {
-  // Get the current date
   let dataAtual = new Date();
 
-  // Format the date as "dd/mm/YYYY"
+  // Formatar data no formato "dd/mm/YYYY"
   let dia = String(dataAtual.getDate()).padStart(2, "0");
   let mes = String(dataAtual.getMonth() + 1).padStart(2, "0");
   let ano = dataAtual.getFullYear();
 
   let dataFormatoBrasil = dia + "/" + mes + "/" + ano;
 
-  // Set the current date as the initial value for both inputs
+  // Inicializa os data pickers com a data atuaal
   inputDataInicio.value = dataFormatoBrasil;
   inputDataFim.value = dataFormatoBrasil;
 }
