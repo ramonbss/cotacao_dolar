@@ -68,8 +68,10 @@ async function obterCotacoes(moedaAlvo) {
     console.log("Resposta do servidor: ", resposta);
     if (resposta["status"]) {
       let cotacao = resposta["data"];
-      cotacoes.push(cotacao);
-      datas.push(dia + "-" + mes + "-" + ano);
+      if (cotacao > 0) {
+        cotacoes.push(cotacao);
+        datas.push(dia + "-" + mes + "-" + ano);
+      }
     } else {
       mostrarMensagemDeErro(
         "Erro ao obter cotação do servidor, tente novamente"
@@ -77,8 +79,18 @@ async function obterCotacoes(moedaAlvo) {
     }
     dataAtual.setDate(dataAtual.getDate() + 1); // Move to the next day
   }
-  plotar_valores(moedaAlvo, cotacoes, datas);
-  mostrarMensagemDeErro("");
+  if (cotacoes.length > 0) {
+    plotar_valores(moedaAlvo, cotacoes, datas);
+    mostrarMensagemDeErro("");
+  } else {
+    mostrarMensagemDeErro(
+      "Não foi possível encontrar cotações no par '" +
+        moedaAlvo +
+        "' para a data solicitada."
+    );
+    plotar_valores(moedaAlvo, [], []);
+  }
+
   setBotoesDesabilitado(false);
 }
 

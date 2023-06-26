@@ -7,6 +7,8 @@ class Cotacoes:
     REAL = 'BRL'
     EURO = 'EUR'
     IENE = 'JPY'
+    MOEDAS = [REAL, EURO, IENE]
+    SEM_COTACAO = 0
 
     @classmethod
     def obter_cotacao(cls, par_alvo: str, data=''):
@@ -16,25 +18,35 @@ class Cotacoes:
         if cotacao_database:
             return cotacao_database.cotacao
 
-        cotacoes = _Cotacao_VatComply.obter_cotacao(
+        resposta_vatcomply = _Cotacao_VatComply.obter_cotacao(
             data
         )
 
-        rates = cotacoes['rates']
+        cotacoes = resposta_vatcomply['rates']
+
+        for moeda in cls.MOEDAS:
+            if moeda not in cotacoes:
+                cotacoes[moeda] = cls.SEM_COTACAO
+
         cls._salvar_cotacoes_no_banco_de_dados(
-            rates, data
+            cotacoes, data
         )
 
-        return round(rates[par_alvo], 2)
+        cotacao_solicitada = cotacoes[par_alvo]
+
+        if cotacao_solicitada != cls.SEM_COTACAO:
+            print(f'cotacao: {cotacao_solicitada}')
+            cotacao_solicitada = round(cotacao_solicitada, 2)
+
+        return cotacao_solicitada
 
     @classmethod
     def _salvar_cotacoes_no_banco_de_dados(cls, vatcomply_rates: dict, data: str):
-        moedas = [cls.REAL, cls.EURO, cls.IENE]
-        cotacoes = [vatcomply_rates[moeda] for moeda in moedas]
-        datas = [data] * len(moedas)
+        cotacoes = [vatcomply_rates[moeda] for moeda in cls.MOEDAS]
+        datas = [data] * len(cls.MOEDAS)
 
         CotacaoBancoDeDados.salvar_cotacoes(
-            moedas, cotacoes, datas
+            cls.MOEDAS, cotacoes, datas
         )
 
 
