@@ -5,6 +5,7 @@ from .lib.funcoes_data import contar_dias_uteis
 from json import loads
 from datetime import datetime
 import requests
+from django.urls import reverse
 # Create your views here.
 
 
@@ -48,11 +49,12 @@ def ler_cotacao_banco_de_dados(request):
                 return retornar_erro('A data precisa está no formato dd-mm-YYYY')
 
         host = request.get_host()
+        endpoint_cotacoes = reverse('graficos:cotacoes-database')
 
         parametros_post = {'moeda': moeda,
                            'data': data}
         resposta = requests.post(
-            f'http://{host}/graficos/cotacoes/database', json=parametros_post).json()
+            f'http://{host}{endpoint_cotacoes}', json=parametros_post).json()
         print(f'dir resposta: {dir(resposta)}')
         print(f'Resposta do servidor:  {resposta}')
         if resposta['status']:
