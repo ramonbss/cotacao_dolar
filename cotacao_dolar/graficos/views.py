@@ -38,7 +38,7 @@ def cotacoes_banco_de_dados(request):
 
         cotacao_database = CotacaoBancoDeDados.obter_cotacao(moeda, data)
         print(f'retornado do db: {cotacao_database}')
-        if cotacao_database:
+        if cotacao_database and cotacao_database.cotacao > 0:
             return JsonResponse({
                 'status': True,
                 'data': {
