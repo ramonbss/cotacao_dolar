@@ -11,6 +11,26 @@ class Cotacoes:
     SEM_COTACAO = 0
 
     @classmethod
+    def tratar_resposta_do_vatcomply(cls, resposta_vatcomply, par_alvo, data):
+        cotacoes = resposta_vatcomply['rates']
+
+        for moeda in cls.MOEDAS:
+            if moeda not in cotacoes:
+                cotacoes[moeda] = cls.SEM_COTACAO
+
+            cotacoes[moeda] = round(cotacoes[moeda], 2)
+
+        cls._salvar_cotacoes_no_banco_de_dados(
+            cotacoes, data
+        )
+
+        cotacao_solicitada = cotacoes[par_alvo]
+
+        print(f'cotacao: {cotacao_solicitada}')
+
+        return cotacao_solicitada
+
+    @classmethod
     def obter_cotacao(cls, par_alvo: str, data=''):
         if data == '':
             data = datetime.now().strftime("%Y-%m-%d")
@@ -22,21 +42,9 @@ class Cotacoes:
             data
         )
 
-        cotacoes = resposta_vatcomply['rates']
-
-        for moeda in cls.MOEDAS:
-            if moeda not in cotacoes:
-                cotacoes[moeda] = cls.SEM_COTACAO
-
-        cls._salvar_cotacoes_no_banco_de_dados(
-            cotacoes, data
+        cotacao_solicitada = cls.tratar_resposta_do_vatcomply(
+            resposta_vatcomply, par_alvo, data
         )
-
-        cotacao_solicitada = cotacoes[par_alvo]
-
-        if cotacao_solicitada != cls.SEM_COTACAO:
-            print(f'cotacao: {cotacao_solicitada}')
-            cotacao_solicitada = round(cotacao_solicitada, 2)
 
         return cotacao_solicitada
 
@@ -60,7 +68,6 @@ class CotacaoBancoDeDados:
     @classmethod
     def salvar_cotacao(cls, moeda: str, cotacao: float, data: str):
         data_convertida = cls.converter_data(data)
-        cotacao = round(cotacao, 2)
         nova_cotacao = CotacaoDolar(
             moeda=moeda, cotacao=cotacao, data=data_convertida)
         nova_cotacao.save()
