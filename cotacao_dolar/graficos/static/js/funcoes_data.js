@@ -124,13 +124,9 @@ function inicializarDataPickersComDataAtual(inputDataInicio, inputDataFim) {
   let dataAtual = new Date();
 
   // Formatar data no formato "dd/mm/YYYY"
-  let dia = String(dataAtual.getDate()).padStart(2, "0");
-  let mes = String(dataAtual.getMonth() + 1).padStart(2, "0");
-  let ano = dataAtual.getFullYear();
+  let dataFormatoBrasil = converterDateEmTextoFormatoBrasil(dataAtual);
 
-  let dataFormatoBrasil = dia + "/" + mes + "/" + ano;
-
-  // Inicializa os data pickers com a data atuaal
+  // Inicializa os data pickers com a data atual
   inputDataInicio.value = dataFormatoBrasil;
   inputDataFim.value = dataFormatoBrasil;
 }
