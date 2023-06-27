@@ -1,4 +1,5 @@
 import { enviarPostRequest } from "./http_requests.js";
+const MAXIMO_INTERVALO_DIAS = 5;
 
 function configurarDatePicker(datePicker, strDatePickerContainer) {
   $(datePicker).datepicker({
@@ -11,6 +12,57 @@ function configurarDatePicker(datePicker, strDatePickerContainer) {
   });
 }
 
+function truncarDatas(data, dataLimite) {
+  if (data > dataLimite) {
+    return dataLimite;
+  }
+  return data;
+}
+
+function converterDateEmTextoFormatoBrasil(data) {
+  let dia = String(data.getDate()).padStart(2, "0");
+  let mes = String(data.getMonth() + 1).padStart(2, "0");
+  let ano = data.getFullYear();
+
+  return dia + "/" + mes + "/" + ano;
+}
+
+async function aplicarRestricoesDataFim() {
+  let inputDataInicio = document.getElementById("data-inicio");
+  let inputDataFim = document.getElementById("data-fim");
+
+  let strDataInicio = inputDataInicio.value;
+  let strDataFim = inputDataFim.value;
+
+  let dataInicio = criarDataObjAPartirFormatoBrasil(strDataInicio);
+  let dataFim = criarDataObjAPartirFormatoBrasil(strDataFim);
+  let dataFimLimite = new Date();
+
+  dataFimLimite.setDate(dataInicio.getDate() + MAXIMO_INTERVALO_DIAS);
+
+  let quantidadeDiasUteis = await contar_dias_uteis_entre_datas(
+    strDataInicio,
+    converterDateEmTextoFormatoBrasil(dataFimLimite)
+  );
+
+  let feriados = MAXIMO_INTERVALO_DIAS - quantidadeDiasUteis;
+
+  dataFimLimite.setDate(
+    dataInicio.getDate() + MAXIMO_INTERVALO_DIAS + feriados
+  );
+  let dataAtual = new Date();
+
+  dataFimLimite = truncarDatas(dataFimLimite, dataAtual);
+
+  let datePicker = $(inputDataFim).datepicker().data("datepicker");
+  datePicker.setStartDate(dataInicio);
+  datePicker.setEndDate(dataFimLimite);
+
+  if (dataFim > dataFimLimite || dataFim < dataInicio) {
+    inputDataFim.value = inputDataInicio.value;
+  }
+}
+
 export function inicializar_data_pickers() {
   let inputDataInicio = document.getElementById("data-inicio");
   let inputDataFim = document.getElementById("data-fim");
@@ -21,6 +73,7 @@ export function inicializar_data_pickers() {
 
   $(inputDataInicio).on("changeDate", async function () {
     await validarCamposDeData();
+    aplicarRestricoesDataFim();
   });
 
   $(inputDataFim).on("changeDate", async function () {
@@ -28,6 +81,7 @@ export function inicializar_data_pickers() {
   });
 
   inicializarDataPickersComDataAtual(inputDataInicio, inputDataFim);
+  aplicarRestricoesDataFim();
   console.log("Data picker inicializados.");
 }
 
