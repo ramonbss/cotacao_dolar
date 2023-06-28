@@ -34,25 +34,43 @@ async function aplicarRestricoesDataFim() {
   let strDataInicio = inputDataInicio.value;
   let strDataFim = inputDataFim.value;
 
+  if (validarData(strDataFim) == false) {
+    strDataFim = strDataInicio;
+  }
+
   let dataInicio = criarDataObjAPartirFormatoBrasil(strDataInicio);
   let dataFim = criarDataObjAPartirFormatoBrasil(strDataFim);
-  let dataFimLimite = new Date();
+  let dataFimLimite = criarDataObjAPartirFormatoBrasil(strDataInicio);
 
   dataFimLimite.setDate(dataInicio.getDate() + MAXIMO_INTERVALO_DIAS);
+  console.log("Data inicio: ", strDataInicio);
+  console.log(
+    "Data Fim Limite: ",
+    converterDateEmTextoFormatoBrasil(dataFimLimite)
+  );
 
   let quantidadeDiasUteis = await contar_dias_uteis_entre_datas(
     strDataInicio,
     converterDateEmTextoFormatoBrasil(dataFimLimite)
   );
+  console.log("QUantidade dias uteis: ", quantidadeDiasUteis);
 
   let feriados = MAXIMO_INTERVALO_DIAS - quantidadeDiasUteis;
 
-  dataFimLimite.setDate(
-    dataInicio.getDate() + MAXIMO_INTERVALO_DIAS + feriados
+  console.log("QUantidade feriados: ", feriados);
+
+  dataFimLimite.setDate(dataFimLimite.getDate() + feriados);
+  console.log(
+    "Data Fim (inicio + MAX_Dias + feriados): ",
+    converterDateEmTextoFormatoBrasil(dataFimLimite)
   );
   let dataAtual = new Date();
 
   dataFimLimite = truncarDatas(dataFimLimite, dataAtual);
+  console.log(
+    "Data Fim truncado com data atual: ",
+    converterDateEmTextoFormatoBrasil(dataFimLimite)
+  );
 
   let datePicker = $(inputDataFim).datepicker().data("datepicker");
   datePicker.setStartDate(dataInicio);
