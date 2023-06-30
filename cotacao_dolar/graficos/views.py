@@ -1,18 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 
 from .lib.cotacoes_moedas import Cotacoes, CotacaoBancoDeDados
 from datetime import datetime
 from json import loads
+from django.views.decorators.csrf import ensure_csrf_cookie
 # Create your views here.
 
 
+@ensure_csrf_cookie
 def graficos(request):
     return render(request, 'graficos.html')
 
 
-@csrf_exempt
 def cotacoes(request):
     if request.method == 'POST':
         request_body = loads(request.body)
@@ -27,7 +27,6 @@ def cotacoes(request):
     return HttpResponse('Okay')
 
 
-@csrf_exempt
 def cotacoes_banco_de_dados(request):
     if request.method == 'POST':
         print(f'Request: {request.body}')

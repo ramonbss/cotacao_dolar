@@ -6,7 +6,9 @@ export async function enviarPostRequest(url, request_data) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
       },
+      mode: "same-origin", // Do not send CSRF token to another domain.
       body: JSON.stringify(request_data),
     });
     console.log("Server:", response);
@@ -23,3 +25,23 @@ export async function enviarPostRequest(url, request_data) {
     // Handle the error condition
   }
 }
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== "") {
+    const cookies = document.cookie.split(";");
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === name + "=") {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+const csrftoken = getCookie("csrftoken");
+
+console.log("Cookie csfr: ", csrftoken);
